@@ -11,7 +11,7 @@ namespace MabelTheCat
 {
     public static class ModBuildInfo
     {
-        public const string Version = "1.3.0";
+        public const string Version = "1.3.1";
     }
 
     public class main : MelonMod
@@ -451,7 +451,7 @@ namespace MabelTheCat
             removeMabels();
             createMabels(true);
             StartTailWagStanding(0);
-            spawnedMabels[0].transform.position = new Vector3(5.0155f, 0.35f, 1.6736f);
+            spawnedMabels[0].transform.position = new Vector3(5.0155f, 0f, 1.6736f);
             spawnedMabels[0].transform.localRotation = Quaternion.Euler(0f, 206.7709f, 0f);
             spawnedMabels[0].SetActive(true);
         }

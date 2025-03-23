@@ -103,3 +103,5 @@ C:\Users\austi\source\repos\MabelTheCat\MabelTheCat\bin\Debug\net6.0\Unity.XR.Ma
 C:\Users\austi\source\repos\MabelTheCat\MabelTheCat\bin\Debug\net6.0\Il2CppPhotonUtilities.dll
 C:\Users\austi\source\repos\MabelTheCat\MabelTheCat\bin\Debug\net6.0\Il2CppFloatCrusher.dll
 C:\Users\austi\source\repos\MabelTheCat\MabelTheCat\bin\Debug\net6.0\Il2CppQuatCompress.dll
+C:\Users\austi\source\repos\MabelTheCat\MabelTheCat\bin\Debug\net6.0\UnityEngine.Il2CppAssetBundleManager.pdb
+C:\Users\austi\source\repos\MabelTheCat\MabelTheCat\obj\Debug\net6.0\MabelTheCat.sourcelink.json
