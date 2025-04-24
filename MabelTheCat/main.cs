@@ -6,12 +6,14 @@ using Il2CppRUMBLE.Interactions.InteractionBase;
 using Il2CppPhoton.Pun;
 using Il2CppExitGames.Client.Photon;
 using RumbleModUI;
+using MelonLoader.Utils;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 namespace MabelTheCat
 {
     public static class ModBuildInfo
     {
-        public const string Version = "1.3.1";
+        public const string Version = "1.4.2";
     }
 
     public class main : MelonMod
@@ -36,6 +38,7 @@ namespace MabelTheCat
         public static Mod MabelTheCat = new Mod();
         private bool showAllCats = false;
         private static GameObject mabelParent;
+        private Texture2D texturesLocal;
 
         public GameObject LoadAssetBundle(string bundleName, string objectName)
         {
@@ -50,13 +53,18 @@ namespace MabelTheCat
 
         public override void OnLateInitializeMelon()
         {
+            if (!Directory.Exists(MelonEnvironment.UserDataDirectory + @"\MabelTheCat"))
+            {
+                Directory.CreateDirectory(MelonEnvironment.UserDataDirectory + @"\MabelTheCat");
+            }
             Calls.onMyModsGathered += checkMods;
             Calls.onMapInitialized += mapInit;
             mabel = LoadAssetBundle("MabelTheCat.mabel", "cat");
+            mabel.SetActive(false);
+            mabel = GameObject.Instantiate(mabel);
             mabel.name = "Mabel";
             GameObject.DontDestroyOnLoad(mabel);
             mabel.transform.localScale = new Vector3(1.25f, 1.25f, 1.25f);
-            //ReskinCat();
             mabel.SetActive(false);
             MabelTheCat.ModName = "MabelTheCat";
             MabelTheCat.ModVersion = ModBuildInfo.Version;
@@ -66,6 +74,26 @@ namespace MabelTheCat
             MabelTheCat.ModSaved += Save;
             UI.instance.UI_Initialized += UIInit;
             showAllCats = (bool)MabelTheCat.Settings[0].SavedValue;
+        }
+
+        private void ReskinCat(GameObject thisMabel)
+        {
+            if (File.Exists(MelonEnvironment.UserDataDirectory + @"\MabelTheCat\Cat.png"))
+            {
+                if (texturesLocal == null)
+                {
+                    texturesLocal = new Texture2D(2, 2);
+                    byte[] Bytes = File.ReadAllBytes(MelonEnvironment.UserDataDirectory + @"\MabelTheCat\Cat.png");
+                    texturesLocal.LoadImage(Bytes);
+                    texturesLocal.hideFlags = HideFlags.HideAndDontSave;
+                }
+                Renderer renderer = thisMabel.transform.GetChild(0).GetComponent<Renderer>();
+                MaterialPropertyBlock block = new MaterialPropertyBlock();
+                renderer.GetPropertyBlock(block);
+                Il2CppStringArray texturesNames = mabel.transform.GetChild(0).GetComponent<Renderer>().material.GetPropertyNames(MaterialPropertyType.Texture);
+                block.SetTexture("_BaseMap", texturesLocal);
+                renderer.SetPropertyBlock(block);
+            }
         }
 
         private void UIInit()
@@ -95,6 +123,7 @@ namespace MabelTheCat
         {
             flatLandFound = Calls.Mods.findOwnMod("FlatLand", "1.6.0", false);
         }
+
         public void OnEvent(EventData eventData)
         {
             if (eventData.Code == 70)
@@ -388,6 +417,7 @@ namespace MabelTheCat
                 spawnedMabels[i].name = "Mabel";
                 spawnedMabels[i].transform.GetChild(0).gameObject.name = "Mesh";
                 spawnedMabels[i].transform.parent = mabelParent.transform;
+                ReskinCat(spawnedMabels[i]);
                 mabelBones[i].Clear();
                 GameObject mabelSpine = spawnedMabels[i].transform.GetChild(1).GetChild(0).gameObject;
                 mabelBones[i].Add(mabelSpine.transform.GetChild(0));
@@ -707,30 +737,7 @@ namespace MabelTheCat
             MelonCoroutines.Start(JointWag(mabelBones[mabelToTransform][31], tailWagRotationMaxes[3], tailWagSpeed[3], 2, 0));
         }
 
-        /*private void ReskinCat()
-        {
-            if (File.Exists(MelonEnvironment.UserDataDirectory + @"\MabelTheCat\Cat.png"))
-            {
-                Texture2D texturesLocal = new Texture2D(2, 2);
-                byte[] Bytes = File.ReadAllBytes(MelonEnvironment.UserDataDirectory + @"\MabelTheCat\Cat.png");
-                ImageConversion.LoadImage(texturesLocal, Bytes);
-                texturesLocal.hideFlags = HideFlags.HideAndDontSave;
-
-                SkinnedMeshRenderer meshRenderer = mabel.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>();
-                MaterialPropertyBlock block = new MaterialPropertyBlock();
-                meshRenderer.GetPropertyBlock(block);
-                block.SetTexture("_BASEMAP", texturesLocal);
-                meshRenderer.SetPropertyBlock(block);
-
-                MelonLogger.Msg("Cat Reskinned");
-            }
-            else
-            {
-                MelonLogger.Error("CAT PHOTO NOT FOUND: " + MelonEnvironment.UserDataDirectory + @"\MabelTheCat\Cat.png");
-            }
-        }
-        
-        public void SavePose()
+        /*public void SavePose()
         {
             List<string> saveText = new List<string>();
             for (int i = 0; i < mabelBones.Count; i++)
