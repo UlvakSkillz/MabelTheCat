@@ -61,11 +61,13 @@ namespace MabelTheCat
             Calls.onMapInitialized += mapInit;
             mabel = LoadAssetBundle("MabelTheCat.mabel", "cat");
             mabel.SetActive(false);
+            GameObject oldMabel = mabel;
             mabel = GameObject.Instantiate(mabel);
             mabel.name = "Mabel";
             GameObject.DontDestroyOnLoad(mabel);
             mabel.transform.localScale = new Vector3(1.25f, 1.25f, 1.25f);
             mabel.SetActive(false);
+            GameObject.Destroy(oldMabel);
             MabelTheCat.ModName = "MabelTheCat";
             MabelTheCat.ModVersion = ModBuildInfo.Version;
             MabelTheCat.SetFolder("MabelTheCat");
@@ -484,6 +486,7 @@ namespace MabelTheCat
             spawnedMabels[0].transform.position = new Vector3(5.0155f, 0f, 1.6736f);
             spawnedMabels[0].transform.localRotation = Quaternion.Euler(0f, 206.7709f, 0f);
             spawnedMabels[0].SetActive(true);
+            yield break;
         }
 
         public static IEnumerator JointWag(Transform joint, float[] minMax, float speed, int axis, float waitTime)
