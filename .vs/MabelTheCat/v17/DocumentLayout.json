@@ -7,6 +7,10 @@
       "RelativeMoniker": "D:0:0:{8B913D81-1D96-4D04-8521-3B1F71025348}|MabelTheCat\\MabelTheCat.csproj|solutionrelative:mabelthecat\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{8B913D81-1D96-4D04-8521-3B1F71025348}|MabelTheCat\\MabelTheCat.csproj|c:\\users\\austi\\source\\repos\\mabelthecat\\mabelthecat\\mabelthecat.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{8B913D81-1D96-4D04-8521-3B1F71025348}|MabelTheCat\\MabelTheCat.csproj|solutionrelative:mabelthecat\\mabelthecat.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{8B913D81-1D96-4D04-8521-3B1F71025348}|MabelTheCat\\MabelTheCat.csproj|c:\\users\\austi\\source\\repos\\mabelthecat\\mabelthecat\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8B913D81-1D96-4D04-8521-3B1F71025348}|MabelTheCat\\MabelTheCat.csproj|solutionrelative:mabelthecat\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -22,11 +26,23 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
+              "Title": "MabelTheCat.csproj",
+              "DocumentMoniker": "C:\\Users\\austi\\source\\repos\\MabelTheCat\\MabelTheCat\\MabelTheCat.csproj",
+              "RelativeDocumentMoniker": "MabelTheCat\\MabelTheCat.csproj",
+              "ToolTip": "C:\\Users\\austi\\source\\repos\\MabelTheCat\\MabelTheCat\\MabelTheCat.csproj",
+              "RelativeToolTip": "MabelTheCat\\MabelTheCat.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-07-31T19:00:04.922Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "MabelTheCat",
               "DocumentMoniker": "C:\\Users\\austi\\source\\repos\\MabelTheCat\\MabelTheCat\\MabelTheCat.csproj",
               "RelativeDocumentMoniker": "MabelTheCat\\MabelTheCat.csproj",
@@ -37,7 +53,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "AssemblyInfo.cs",
               "DocumentMoniker": "C:\\Users\\austi\\source\\repos\\MabelTheCat\\MabelTheCat\\AssemblyInfo.cs",
               "RelativeDocumentMoniker": "MabelTheCat\\AssemblyInfo.cs",
@@ -55,7 +71,7 @@
               "RelativeDocumentMoniker": "MabelTheCat\\main.cs",
               "ToolTip": "C:\\Users\\austi\\source\\repos\\MabelTheCat\\MabelTheCat\\main.cs",
               "RelativeToolTip": "MabelTheCat\\main.cs",
-              "ViewState": "AgIAACMAAAAAAAAAAAAtwEUAAAApAAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAgwDQAAABZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-04T01:10:57.961Z",
               "EditorCaption": ""

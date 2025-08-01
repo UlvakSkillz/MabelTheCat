@@ -13,7 +13,7 @@ namespace MabelTheCat
 {
     public static class ModBuildInfo
     {
-        public const string Version = "1.4.2";
+        public const string Version = "1.5.0";
     }
 
     public class main : MelonMod
@@ -40,17 +40,6 @@ namespace MabelTheCat
         private static GameObject mabelParent;
         private Texture2D texturesLocal;
 
-        public GameObject LoadAssetBundle(string bundleName, string objectName)
-        {
-            using (Stream bundleStream = MelonAssembly.Assembly.GetManifestResourceStream(bundleName))
-            {
-                byte[] bundleBytes = new byte[bundleStream.Length];
-                bundleStream.Read(bundleBytes, 0, bundleBytes.Length);
-                Il2CppAssetBundle bundle = Il2CppAssetBundleManager.LoadFromMemory(bundleBytes);
-                return UnityEngine.Object.Instantiate(bundle.LoadAsset<GameObject>(objectName));
-            }
-        }
-
         public override void OnLateInitializeMelon()
         {
             if (!Directory.Exists(MelonEnvironment.UserDataDirectory + @"\MabelTheCat"))
@@ -59,8 +48,9 @@ namespace MabelTheCat
             }
             Calls.onMyModsGathered += checkMods;
             Calls.onMapInitialized += mapInit;
-            mabel = LoadAssetBundle("MabelTheCat.mabel", "cat");
+            mabel = GameObject.Instantiate(Calls.LoadAssetFromStream<GameObject>(this, "MabelTheCat.mabel", "cat"));
             mabel.SetActive(false);
+            //Asset Bundle Load Mabel wasnt wanting to be reskinned but a suped Mabel was
             GameObject oldMabel = mabel;
             mabel = GameObject.Instantiate(mabel);
             mabel.name = "Mabel";
