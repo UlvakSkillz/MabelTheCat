@@ -1,5 +1,4 @@
 ﻿using MelonLoader;
-using RumbleModdingAPI;
 using System.Collections;
 using UnityEngine;
 using Il2CppRUMBLE.Interactions.InteractionBase;
@@ -8,12 +7,13 @@ using Il2CppExitGames.Client.Photon;
 using RumbleModUI;
 using MelonLoader.Utils;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using RumbleModdingAPI.RMAPI;
 
 namespace MabelTheCat
 {
     public static class ModBuildInfo
     {
-        public const string Version = "1.5.0";
+        public const string Version = "1.6.0";
     }
 
     public class main : MelonMod
@@ -39,21 +39,23 @@ namespace MabelTheCat
         private bool showAllCats = false;
         private static GameObject mabelParent;
         private Texture2D texturesLocal;
+        private static Shader URPUnlit;
 
         public override void OnLateInitializeMelon()
         {
+            Actions.onMyModsGathered += checkMods;
+            URPUnlit = Shader.Find("Universal Render Pipeline/Unlit");
             if (!Directory.Exists(MelonEnvironment.UserDataDirectory + @"\MabelTheCat"))
             {
                 Directory.CreateDirectory(MelonEnvironment.UserDataDirectory + @"\MabelTheCat");
             }
-            Calls.onMyModsGathered += checkMods;
-            Calls.onMapInitialized += mapInit;
-            mabel = GameObject.Instantiate(Calls.LoadAssetFromStream<GameObject>(this, "MabelTheCat.mabel", "cat"));
+            mabel = GameObject.Instantiate(AssetBundles.LoadAssetFromStream<GameObject>(this, "MabelTheCat.mabel", "cat"));
             mabel.SetActive(false);
             //Asset Bundle Load Mabel wasnt wanting to be reskinned but a suped Mabel was
             GameObject oldMabel = mabel;
             mabel = GameObject.Instantiate(mabel);
             mabel.name = "Mabel";
+            ChangeShaderLitToUnlit(mabel);
             GameObject.DontDestroyOnLoad(mabel);
             mabel.transform.localScale = new Vector3(1.25f, 1.25f, 1.25f);
             mabel.SetActive(false);
@@ -66,6 +68,31 @@ namespace MabelTheCat
             MabelTheCat.ModSaved += Save;
             UI.instance.UI_Initialized += UIInit;
             showAllCats = (bool)MabelTheCat.Settings[0].SavedValue;
+        }
+
+        private static void ChangeShaderLitToUnlit(GameObject asset)
+        {
+            Renderer parentRendderer = asset.GetComponent<Renderer>();
+            if (parentRendderer != null)
+            {
+                for (int i = 0; i < parentRendderer.materials.Length; i++)
+                {
+                    if (parentRendderer.materials[i].shader.name == "Universal Render Pipeline/Lit")
+                    {
+                        parentRendderer.materials[i].shader = URPUnlit;
+                    }
+                }
+            }
+            foreach (Renderer renderer in asset.GetComponentsInChildren<Renderer>())
+            {
+                for (int i = 0; i < renderer.materials.Length; i++)
+                {
+                    if (renderer.materials[i].shader.name == "Universal Render Pipeline/Lit")
+                    {
+                        renderer.materials[i].shader = URPUnlit;
+                    }
+                }
+            }
         }
 
         private void ReskinCat(GameObject thisMabel)
@@ -141,22 +168,22 @@ namespace MabelTheCat
                 if (showAllCats)
                 {
                     PoseLayingDown(0);
-                    spawnedMabels[0].transform.position = new Vector3(9.9f, 0.8573f, -0.6227f);
-                    spawnedMabels[0].transform.localRotation = Quaternion.Euler(306.764f, 319.4213f, 13.756f);
+                    spawnedMabels[0].transform.position = new Vector3(-0.2856f, 1.5673f, -2.7473f);
+                    spawnedMabels[0].transform.localRotation = Quaternion.Euler(310.0584f, 41.4574f, 0f);
                     StartTailWagStanding(1);
-                    spawnedMabels[1].transform.position = new Vector3(5.0155f, 0.35f, 1.6736f);
+                    spawnedMabels[1].transform.position = new Vector3(5.0155f, 0.35f, 1.9536f);
                     spawnedMabels[1].transform.localRotation = Quaternion.Euler(0f, 206.7709f, 0f);
                     PoseSleeping(2);
-                    spawnedMabels[2].transform.position = new Vector3(4.3618164f, 1.5500001f, 9.430909f);
+                    spawnedMabels[2].transform.position = new Vector3(4.3618f, 1.62f, 12.5309f);
                     spawnedMabels[2].transform.localRotation = Quaternion.Euler(347.7088f, 146.4092f, 95.1773f);
                     PoseSleeping(3);
                     spawnedMabels[3].transform.position = new Vector3(-4.0618153f, 0.20091006f, -1.5218217f);
                     spawnedMabels[3].transform.localRotation = Quaternion.Euler(347.7088f, 146.4092f, 95.17729f);
                     PoseSitting(4);
-                    spawnedMabels[4].transform.position = new Vector3(-3.61f, 5.1291f, 2.4427f);
-                    spawnedMabels[4].transform.localRotation = Quaternion.Euler(306.0583f, 130.39539f, -8.122779E-05f);
+                    spawnedMabels[4].transform.position = new Vector3(12.9546f, 7.4725f, 2.6627f);
+                    spawnedMabels[4].transform.localRotation = Quaternion.Euler(331.7762f, 238.0956f, -0.0001f);
                     PoseStanding(5);
-                    spawnedMabels[5].transform.position = new Vector3(4.0682f, 2.8709f, 9.8809f);
+                    spawnedMabels[5].transform.position = new Vector3(4.0682f, 2.8709f, 13.1809f);
                     spawnedMabels[5].transform.localRotation = Quaternion.Euler(-0f, 206.7709f, 0f);
                 }
                 else
@@ -166,17 +193,17 @@ namespace MabelTheCat
                     {
                         case 0:
                             PoseLayingDown(0);
-                            spawnedMabels[0].transform.position = new Vector3(9.9f, 0.8573f, -0.6227f);
-                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(306.764f, 319.4213f, 13.756f);
+                            spawnedMabels[0].transform.position = new Vector3(-0.2856f, 1.5673f, -2.7473f);
+                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(310.0584f, 41.4574f, 0f);
                             break;
                         case 1:
                             StartTailWagStanding(0);
-                            spawnedMabels[0].transform.position = new Vector3(5.0155f, 0.35f, 1.6736f);
+                            spawnedMabels[0].transform.position = new Vector3(5.0155f, 0.35f, 1.9536f);
                             spawnedMabels[0].transform.localRotation = Quaternion.Euler(0f, 206.7709f, 0f);
                             break;
                         case 2:
                             PoseSleeping(0);
-                            spawnedMabels[0].transform.position = new Vector3(4.3618164f, 1.5500001f, 9.430909f);
+                            spawnedMabels[0].transform.position = new Vector3(4.3618f, 1.62f, 12.5309f);
                             spawnedMabels[0].transform.localRotation = Quaternion.Euler(347.7088f, 146.4092f, 95.1773f);
                             break;
                         case 3:
@@ -186,12 +213,12 @@ namespace MabelTheCat
                             break;
                         case 4:
                             PoseSitting(0);
-                            spawnedMabels[0].transform.position = new Vector3(-3.61f, 5.1291f, 2.4427f);
-                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(306.0583f, 130.39539f, -8.122779E-05f);
+                            spawnedMabels[0].transform.position = new Vector3(12.9546f, 7.4725f, 2.6627f);
+                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(331.7762f, 238.0956f, -0.0001f);
                             break;
                         case 5:
                             PoseStanding(0);
-                            spawnedMabels[0].transform.position = new Vector3(4.0682f, 2.8709f, 9.8809f);
+                            spawnedMabels[0].transform.position = new Vector3(4.0682f, 2.8709f, 13.1809f);
                             spawnedMabels[0].transform.localRotation = Quaternion.Euler(-0f, 206.7709f, 0f);
                             break;
                     }
@@ -202,23 +229,23 @@ namespace MabelTheCat
                 if (showAllCats)
                 {
                     StartTailWagStanding(0);
-                    spawnedMabels[0].transform.position = new Vector3(-15.2646f, -3.2428f, -9.9838f);
+                    spawnedMabels[0].transform.position = new Vector3(-18.0775f, -3.3528f, -9.384f);
                     spawnedMabels[0].transform.localRotation = Quaternion.Euler(0f, 234.0795f, 0f);
                     PoseSitting(1);
-                    spawnedMabels[1].transform.position = new Vector3(-24.8039f, 0.8077f, -16.2777f);
-                    spawnedMabels[1].transform.localRotation = Quaternion.Euler(322.0467f, 64.7633f, 0f);
+                    spawnedMabels[1].transform.position = new Vector3(-29.7215f, 1.5771f, -19.8603f);
+                    spawnedMabels[1].transform.localRotation = Quaternion.Euler(328.6059f, 61.3965f, 0f);
                     PoseStanding(2);
-                    spawnedMabels[2].transform.position = new Vector3(14.2072f, 6.9445f, 6.0545f);
-                    spawnedMabels[2].transform.localRotation = Quaternion.Euler(0f, 281.874f, 0f);
+                    spawnedMabels[2].transform.position = new Vector3(14.1668f, 7.1245f, 4.1731f);
+                    spawnedMabels[2].transform.localRotation = Quaternion.Euler(0f, 304.9234f, 0f);
                     PoseSleeping(3);
-                    spawnedMabels[3].transform.position = new Vector3(-22.4429f, -5.9974f, 0.6699f);
+                    spawnedMabels[3].transform.position = new Vector3(-22.4429f, -5.7905f, 0.6699f);
                     spawnedMabels[3].transform.localRotation = Quaternion.Euler(0f, 62.9994f, 92.1347f);
                     PoseLayingDown(4);
                     spawnedMabels[4].transform.position = new Vector3(5.8098f, -0.1547f, 5.3263f);
                     spawnedMabels[4].transform.localRotation = Quaternion.Euler(302.1827f, 232.8239f, 0f);
                     PoseSitting(5);
-                    spawnedMabels[5].transform.position = new Vector3(-25.9657f, 14.6567f, 12.3286f);
-                    spawnedMabels[5].transform.localRotation = Quaternion.Euler(308.2613f, 158.6978f, 0f);
+                    spawnedMabels[5].transform.position = new Vector3(26.0936f, -13.7054f, -9.2592f);
+                    spawnedMabels[5].transform.localRotation = Quaternion.Euler(299.6111f, 293.0545f, -0.0001f);
                 }
                 else
                 {
@@ -227,22 +254,22 @@ namespace MabelTheCat
                     {
                         case 0:
                             StartTailWagStanding(0);
-                            spawnedMabels[0].transform.position = new Vector3(-15.2646f, -3.2428f, -9.9838f);
+                            spawnedMabels[0].transform.position = new Vector3(-18.0775f, -3.3528f, -9.384f);
                             spawnedMabels[0].transform.localRotation = Quaternion.Euler(0f, 234.0795f, 0f);
                             break;
                         case 1:
                             PoseSitting(0);
-                            spawnedMabels[0].transform.position = new Vector3(-24.8039f, 0.8077f, -16.2777f);
-                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(322.0467f, 64.7633f, 0f);
+                            spawnedMabels[0].transform.position = new Vector3(-29.7215f, 1.5771f, -19.8603f);
+                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(328.6059f, 61.3965f, 0f);
                             break;
                         case 2:
                             PoseStanding(0);
-                            spawnedMabels[0].transform.position = new Vector3(14.2072f, 6.9445f, 6.0545f);
-                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(0f, 281.874f, 0f);
+                            spawnedMabels[0].transform.position = new Vector3(14.1668f, 7.1245f, 4.1731f);
+                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(0f, 304.9234f, 0f);
                             break;
                         case 3:
                             PoseSleeping(0);
-                            spawnedMabels[0].transform.position = new Vector3(-22.4429f, -5.9974f, 0.6699f);
+                            spawnedMabels[0].transform.position = new Vector3(-22.4429f, -5.7905f, 0.6699f);
                             spawnedMabels[0].transform.localRotation = Quaternion.Euler(0f, 62.9994f, 92.1347f);
                             break;
                         case 4:
@@ -252,8 +279,8 @@ namespace MabelTheCat
                             break;
                         case 5:
                             PoseSitting(0);
-                            spawnedMabels[0].transform.position = new Vector3(-25.9657f, 14.6567f, 12.3286f);
-                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(308.2613f, 158.6978f, 0f);
+                            spawnedMabels[0].transform.position = new Vector3(26.0936f, -13.7054f, -9.2592f);
+                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(299.6111f, 293.0545f, -0.0001f);
                             break;
                     }
                 }
@@ -263,17 +290,17 @@ namespace MabelTheCat
                 if (showAllCats)
                 {
                     PoseSitting(0);
-                    spawnedMabels[0].transform.position = new Vector3(-8.0657f, 3.3299f, 19.8217f);
-                    spawnedMabels[0].transform.localRotation = Quaternion.Euler(295.1778f, 162.5442f, 0f);
+                    spawnedMabels[0].transform.position = new Vector3(-5.8857f, 3.1199f, 18.2317f);
+                    spawnedMabels[0].transform.localRotation = Quaternion.Euler(304.6019f, 162.5442f, 0f);
                     PoseStanding(1);
-                    spawnedMabels[1].transform.position = new Vector3(-19.352f, 2.3619f, -9.9329f);
-                    spawnedMabels[1].transform.localRotation = Quaternion.Euler(0f, 114.5284f, 0f);
+                    spawnedMabels[1].transform.position = new Vector3(3.9132f, 10.0911f, -15.235f);
+                    spawnedMabels[1].transform.localRotation = Quaternion.Euler(0f, 34.516f, 0f);
                     PoseSleeping(2);
-                    spawnedMabels[2].transform.position = new Vector3(16.0696f, 2.5119f, -13.5693f);
-                    spawnedMabels[2].transform.localRotation = Quaternion.Euler(0f, 0f, 101.1101f);
+                    spawnedMabels[2].transform.position = new Vector3(-16.8323f, 0.6127f, -13.5693f);
+                    spawnedMabels[2].transform.localRotation = Quaternion.Euler(0f, 66.8559f, 101.1102f);
                     PoseLayingDown(3);
-                    spawnedMabels[3].transform.position = new Vector3(19.4568f, 2.7795f, 3.156f);
-                    spawnedMabels[3].transform.localRotation = Quaternion.Euler(298.0505f, 256.9204f, 0f);
+                    spawnedMabels[3].transform.position = new Vector3(20.2522f, 2.6695f, -5.1527f);
+                    spawnedMabels[3].transform.localRotation = Quaternion.Euler(311.9057f, 284.6211f, 4.051f);
                 }
                 else
                 {
@@ -282,23 +309,23 @@ namespace MabelTheCat
                     {
                         case 0:
                             PoseSitting(0);
-                            spawnedMabels[0].transform.position = new Vector3(-8.0657f, 3.3299f, 19.8217f);
-                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(295.1778f, 162.5442f, 0f);
+                            spawnedMabels[0].transform.position = new Vector3(-5.8857f, 3.1199f, 18.2317f);
+                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(304.6019f, 162.5442f, 0f);
                             break;
                         case 1:
                             PoseStanding(0);
-                            spawnedMabels[0].transform.position = new Vector3(-19.352f, 2.3619f, -9.9329f);
-                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(0f, 114.5284f, 0f);
+                            spawnedMabels[0].transform.position = new Vector3(3.9132f, 10.0911f, -15.235f);
+                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(0f, 34.516f, 0f);
                             break;
                         case 2:
                             PoseSleeping(0);
-                            spawnedMabels[0].transform.position = new Vector3(16.0696f, 2.5119f, -13.5693f);
-                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(0f, 0f, 101.1101f);
+                            spawnedMabels[0].transform.position = new Vector3(-16.8323f, 0.6127f, -13.5693f);
+                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(0f, 66.8559f, 101.1102f);
                             break;
                         case 3:
                             PoseLayingDown(0);
-                            spawnedMabels[0].transform.position = new Vector3(19.4568f, 2.7795f, 3.156f);
-                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(298.0505f, 256.9204f, 0f);
+                            spawnedMabels[0].transform.position = new Vector3(20.2522f, 2.6695f, -5.1527f);
+                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(311.9057f, 284.6211f, 4.051f);
                             break;
                     }
                 }
@@ -308,16 +335,16 @@ namespace MabelTheCat
                 if (showAllCats)
                 {
                     PoseSitting(0);
-                    spawnedMabels[0].transform.position = new Vector3(14.1713f, 10.4217f, -6.5722f);
-                    spawnedMabels[0].transform.localRotation = Quaternion.Euler(305.0462f, 300.4279f, 0f);
+                    spawnedMabels[0].transform.position = new Vector3(14.9294f, 10.1897f, 2.5732f);
+                    spawnedMabels[0].transform.localRotation = Quaternion.Euler(323.7954f, 264.307f, 0f);
                     PoseStanding(1);
-                    spawnedMabels[1].transform.position = new Vector3(-5.8972f, 7.4398f, -11.3046f);
+                    spawnedMabels[1].transform.position = new Vector3(-5.8972f, 7.3898f, -11.3046f);
                     spawnedMabels[1].transform.localRotation = Quaternion.Euler(10.3407f, 80.0742f, 8.0421f);
                     PoseSleeping(2);
-                    spawnedMabels[2].transform.position = new Vector3(2.1673f, 5.0421f, 11.3458f);
-                    spawnedMabels[2].transform.localRotation = Quaternion.Euler(0f, 187.7051f, 90f);
+                    spawnedMabels[2].transform.position = new Vector3(-9.5443f, 3.6002f, 7.8089f);
+                    spawnedMabels[2].transform.localRotation = Quaternion.Euler(343.6888f, 135.2773f, 90f);
                     PoseLayingDown(3);
-                    spawnedMabels[3].transform.position = new Vector3(-13.8633f, 7.94f, -5.8903f);
+                    spawnedMabels[3].transform.position = new Vector3(-16.8247f, 13.9741f, -4.6171f);
                     spawnedMabels[3].transform.localRotation = Quaternion.Euler(323.3444f, 51.1345f, 0f);
                 }
                 else
@@ -327,22 +354,22 @@ namespace MabelTheCat
                     {
                         case 0:
                             PoseSitting(0);
-                            spawnedMabels[0].transform.position = new Vector3(14.1713f, 10.4217f, -6.5722f);
-                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(305.0462f, 300.4279f, 0f);
+                            spawnedMabels[0].transform.position = new Vector3(14.9294f, 10.1897f, 2.5732f);
+                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(323.7954f, 264.307f, 0f);
                             break;
                         case 1:
                             PoseStanding(0);
-                            spawnedMabels[0].transform.position = new Vector3(-5.8972f, 7.4398f, -11.3046f);
+                            spawnedMabels[0].transform.position = new Vector3(-5.8972f, 7.3898f, -11.3046f);
                             spawnedMabels[0].transform.localRotation = Quaternion.Euler(10.3407f, 80.0742f, 8.0421f);
                             break;
                         case 2:
                             PoseSleeping(0);
-                            spawnedMabels[0].transform.position = new Vector3(2.1673f, 5.0421f, 11.3458f);
-                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(0f, 187.7051f, 90f);
+                            spawnedMabels[0].transform.position = new Vector3(-9.5443f, 3.6002f, 7.8089f);
+                            spawnedMabels[0].transform.localRotation = Quaternion.Euler(343.6888f, 135.2773f, 90f);
                             break;
                         case 3:
                             PoseLayingDown(0);
-                            spawnedMabels[0].transform.position = new Vector3(-13.8633f, 7.94f, -5.8903f);
+                            spawnedMabels[0].transform.position = new Vector3(-16.8247f, 13.9741f, -4.6171f);
                             spawnedMabels[0].transform.localRotation = Quaternion.Euler(323.3444f, 51.1345f, 0f);
                             break;
                     }
@@ -351,25 +378,6 @@ namespace MabelTheCat
             for (int i = 0; i < spawnedMabels.Length; i++)
             {
                 spawnedMabels[i].SetActive(true);
-            }
-        }
-
-        private void mapInit()
-        {
-            if (!init)
-            {
-                PhotonNetwork.NetworkingClient.EventReceived += (Action<EventData>)OnEvent;
-                init = true;
-            }
-            createMabels(false);
-            poseCats();
-            mabelPosingReady?.Invoke();
-            if (customMapSceneCount != sceneCount)
-            {
-                for (int i = 0; i < spawnedMabels.Length; i++)
-                {
-                    spawnedMabels[i].SetActive(true);
-                }
             }
         }
 
@@ -463,6 +471,22 @@ namespace MabelTheCat
             currentScene = sceneName;
             sceneCount++;
             inFlatLand = false;
+            if (sceneName == "Loader") { return; }
+            if (!init)
+            {
+                PhotonNetwork.NetworkingClient.EventReceived += (Action<EventData>)OnEvent;
+                init = true;
+            }
+            createMabels(false);
+            poseCats();
+            mabelPosingReady?.Invoke();
+            if (customMapSceneCount != sceneCount)
+            {
+                for (int i = 0; i < spawnedMabels.Length; i++)
+                {
+                    spawnedMabels[i].SetActive(true);
+                }
+            }
         }
 
         private IEnumerator toFlatLand()
@@ -506,8 +530,9 @@ namespace MabelTheCat
                             break;
                     }
                 }
-                catch
+                catch (Exception e)
                 {
+                    MelonLogger.Error(e);
                     yield break;
                 }
                 if (speed < 0)
