@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MabelTheCat")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2c6f10075d0b2137684c89c9f1a620576598579b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+64fdc8816fc657ae8cb69c9d784d39bb97bffef5")]
 [assembly: System.Reflection.AssemblyProductAttribute("MabelTheCat")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MabelTheCat")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
