@@ -20,7 +20,7 @@ namespace MabelTheCat
             MabelTheCatCategory = MelonPreferences.CreateCategory("MabelTheCat", "Settings");
             MabelTheCatCategory.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 
-            showAllCats = MabelTheCatCategory.CreateEntry("showAllCats", true, "Show all Cats", "Toggling ON will have all the Cats Shown.");
+            showAllCats = MabelTheCatCategory.CreateEntry("showAllCats", false, "Show all Cats", "Toggling ON will have all the Cats Shown.");
 
             StoreLastSavedPrefs();
 		}
