@@ -4,16 +4,16 @@ using UnityEngine;
 using Il2CppRUMBLE.Interactions.InteractionBase;
 using Il2CppPhoton.Pun;
 using Il2CppExitGames.Client.Photon;
-using RumbleModUI;
 using MelonLoader.Utils;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using RumbleModdingAPI.RMAPI;
+using UIFramework;
 
 namespace MabelTheCat
 {
     public static class ModBuildInfo
     {
-        public const string Version = "1.6.0";
+        public const string Version = "1.7.0";
     }
 
     public class main : MelonMod
@@ -35,11 +35,15 @@ namespace MabelTheCat
         private bool init = false;
         public static event Action mabelPosingReady;
         private int customMapSceneCount = 0;
-        public static Mod MabelTheCat = new Mod();
-        private bool showAllCats = false;
         private static GameObject mabelParent;
         private Texture2D texturesLocal;
         private static Shader URPUnlit;
+
+        public override void OnInitializeMelon()
+        {
+            Preferences.InitPrefs();
+            UI.RegisterMelon(this, Preferences.MabelTheCatCategory).OnModSaved += Save;
+        }
 
         public override void OnLateInitializeMelon()
         {
@@ -60,14 +64,6 @@ namespace MabelTheCat
             mabel.transform.localScale = new Vector3(1.25f, 1.25f, 1.25f);
             mabel.SetActive(false);
             GameObject.Destroy(oldMabel);
-            MabelTheCat.ModName = "MabelTheCat";
-            MabelTheCat.ModVersion = ModBuildInfo.Version;
-            MabelTheCat.SetFolder("MabelTheCat");
-            MabelTheCat.AddToList("Show all Cats", false, 0, "Toggling ON will have all the Cats Shown.", new Tags { });
-            MabelTheCat.GetFromFile();
-            MabelTheCat.ModSaved += Save;
-            UI.instance.UI_Initialized += UIInit;
-            showAllCats = (bool)MabelTheCat.Settings[0].SavedValue;
         }
 
         private static void ChangeShaderLitToUnlit(GameObject asset)
@@ -115,16 +111,10 @@ namespace MabelTheCat
             }
         }
 
-        private void UIInit()
-        {
-            UI.instance.AddMod(MabelTheCat);
-        }
-
         private void Save()
         {
-            if (showAllCats != (bool)MabelTheCat.Settings[0].SavedValue)
+            if (Preferences.IsPrefChanged(Preferences.showAllCats))
             {
-                showAllCats = (bool)MabelTheCat.Settings[0].SavedValue;
                 removeMabels();
                 if (inFlatLand)
                 {
@@ -136,6 +126,7 @@ namespace MabelTheCat
                 }
                 poseCats();
             }
+            Preferences.StoreLastSavedPrefs();
         }
 
         private void checkMods()
@@ -165,7 +156,7 @@ namespace MabelTheCat
                 {
                     MelonCoroutines.Start(listenForFlatLandButton());
                 }
-                if (showAllCats)
+                if (Preferences.showAllCats.Value)
                 {
                     PoseLayingDown(0);
                     spawnedMabels[0].transform.position = new Vector3(-0.2856f, 1.5673f, -2.7473f);
@@ -226,7 +217,7 @@ namespace MabelTheCat
             }
             else if (currentScene == "Park")
             {
-                if (showAllCats)
+                if (Preferences.showAllCats.Value)
                 {
                     StartTailWagStanding(0);
                     spawnedMabels[0].transform.position = new Vector3(-18.0775f, -3.3528f, -9.384f);
@@ -287,7 +278,7 @@ namespace MabelTheCat
             }
             else if (currentScene == "Map0")
             {
-                if (showAllCats)
+                if (Preferences.showAllCats.Value)
                 {
                     PoseSitting(0);
                     spawnedMabels[0].transform.position = new Vector3(-5.8857f, 3.1199f, 18.2317f);
@@ -332,7 +323,7 @@ namespace MabelTheCat
             }
             else if (currentScene == "Map1")
             {
-                if (showAllCats)
+                if (Preferences.showAllCats.Value)
                 {
                     PoseSitting(0);
                     spawnedMabels[0].transform.position = new Vector3(14.9294f, 10.1897f, 2.5732f);
@@ -384,7 +375,7 @@ namespace MabelTheCat
         private void createMabels(bool isFlatLand)
         {
             mabelParent = new GameObject("Mabels");
-            if (showAllCats)
+            if (Preferences.showAllCats.Value)
             {
                 if (isFlatLand)
                 {

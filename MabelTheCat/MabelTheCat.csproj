@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -53,6 +53,9 @@
     </Reference>
     <Reference Include="RumbleModdingAPI">
       <HintPath>F:\SteamLibrary\steamapps\common\RUMBLE\Mods\RumbleModdingAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="UIFramework">
+      <HintPath>F:\SteamLibrary\steamapps\common\RUMBLE\Mods\UIFramework.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>F:\SteamLibrary\steamapps\common\RUMBLE\MelonLoader\Il2CppAssemblies\UnityEngine.dll</HintPath>
